@@ -16,8 +16,7 @@ public class XtmTaskApplication {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter football club name:");
         String userInput = scanner.nextLine();
-
-        final String uri = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=football+club+intitle:" + userInput + "&srlimit=10&srinfo=&srprop=snippet";
+        final String uri = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=football+intitle:" + userInput + "&srlimit=10&srinfo=&srprop=snippet";
 
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(uri, String.class);
@@ -29,11 +28,12 @@ public class XtmTaskApplication {
             JSONObject o = data.getJSONObject(i);
             String title = o.getString("title");
             String replacedTitle = title.replace(" ", "_");
-            System.out.println("https://en.wikipedia.org/wiki/" + replacedTitle);
+            if (o.getString("snippet").contains("club")) {
+                System.out.println("https://en.wikipedia.org/wiki/" + replacedTitle);
+                break;
+            }
         }
-
     }
-
 }
 
 
